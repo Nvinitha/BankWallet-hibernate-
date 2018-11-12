@@ -14,7 +14,7 @@ public class CustomerBean {
 	@Id
 	@Column(name="cust_id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cId;
+	private int Id;
 
 	@Column(name="First_name")
 	private String firstName;
@@ -24,7 +24,8 @@ public class CustomerBean {
 	
 	@Column(name="email_id")
 	private String emailId;
-	
+	@Column(name="gender")
+	private String gender;
 	
 	
 	@Column(name="phone_number")
@@ -39,6 +40,12 @@ public class CustomerBean {
 	
 
 	
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getPhoneNo() {
 		return phoneNo;
 	}
@@ -78,17 +85,22 @@ public class CustomerBean {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
 	@Override
 	public String toString() {
-		return "FirstName = " + firstName + "\n LastName = "
-				+ lastName  + "\n PhoneNo = " + phoneNo
-				+ "\n Address = " + address;
+		return "CustomerBean [Id=" + Id + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId
+				+ ", gender=" + gender + ", phoneNo=" + phoneNo + ", panNum=" + panNum + ", address=" + address + "]";
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + Id;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((emailId == null) ? 0 : emailId.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((panNum == null) ? 0 : panNum.hashCode());
 		result = prime * result + ((phoneNo == null) ? 0 : phoneNo.hashCode());
 		return result;
 	}
@@ -101,6 +113,38 @@ public class CustomerBean {
 		if (getClass() != obj.getClass())
 			return false;
 		CustomerBean other = (CustomerBean) obj;
+		if (Id != other.Id)
+			return false;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (emailId == null) {
+			if (other.emailId != null)
+				return false;
+		} else if (!emailId.equals(other.emailId))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (panNum == null) {
+			if (other.panNum != null)
+				return false;
+		} else if (!panNum.equals(other.panNum))
+			return false;
 		if (phoneNo == null) {
 			if (other.phoneNo != null)
 				return false;
@@ -108,6 +152,24 @@ public class CustomerBean {
 			return false;
 		return true;
 	}
+	public CustomerBean(int id, String firstName, String lastName, String emailId, String gender, String phoneNo,
+			String panNum, String address) {
+		super();
+		Id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.emailId = emailId;
+		this.gender = gender;
+		this.phoneNo = phoneNo;
+		this.panNum = panNum;
+		this.address = address;
+	}
+	public CustomerBean() {
+		super();
+	}
+	
+	
+	
 	
 	
 	

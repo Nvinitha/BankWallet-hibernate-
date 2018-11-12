@@ -3,6 +3,8 @@ package com.capg.paymentwallet.service;
 import com.capg.paymentwallet.bean.AccountBean;
 import com.capg.paymentwallet.dao.AccountDAOImpl;
 import com.capg.paymentwallet.dao.IAccountDao;
+import com.capg.paymentwallet.exception.CustomerException;
+import com.capg.paymentwallet.exception.CustomerExceptionMessage;
 
 public class AccountServiceImpl implements IAccountService{
 
@@ -29,16 +31,22 @@ public class AccountServiceImpl implements IAccountService{
 	@Override
 	public boolean withdraw(AccountBean accountBean, double withdrawAmount)
 			throws Exception {
+		if(accountBean.getBalance()>withdrawAmount)
+		{
 		accountBean.setBalance(accountBean.getBalance()-withdrawAmount);
 		IAccountDao dao=new AccountDAOImpl();
 		boolean result=dao.updateAccount(accountBean);
 		return result;
+	}else
+	{
+		throw new CustomerException(CustomerExceptionMessage.BALERROR);
 	}
-
-	@Override
-	public boolean fundTransfer(AccountBean transferingAccountBean,
-			AccountBean beneficiaryAccountBean, double transferAmount) throws Exception {
 		
+	}
+	@Override
+	public boolean fundTransfer(AccountBean transferingAccountBean,AccountBean beneficiaryAccountBean, double transferAmount) throws Exception {
+		if(transferingAccountBean.getBalance()>transferAmount)
+		{
 		transferingAccountBean.setBalance(transferingAccountBean.getBalance()-transferAmount);
 		beneficiaryAccountBean.setBalance(beneficiaryAccountBean.getBalance()+transferAmount);
 		
@@ -47,8 +55,12 @@ public class AccountServiceImpl implements IAccountService{
 		boolean result2=dao.updateAccount(beneficiaryAccountBean);
 		return result1 && result2;
 	}
+		else
+		{
+			throw new CustomerException(CustomerExceptionMessage.BALERROR);
+		}
 
-	
+	}
 
 
 
@@ -58,5 +70,41 @@ public class AccountServiceImpl implements IAccountService{
 		AccountBean bean=dao.findAccount(accountId);
 		return bean;
 	}
+	public boolean validations(AccountBean accountBean) throws CustomerException {
+		boolean isValid = false;
+		if (accountBean.getCustomerBean().getFirstName().trim().length() < 4) {
+			throw new CustomerException(CustomerExceptionMessage.FNERROR);
+		} else if (accountBean.getCustomerBean().getLastName().trim().length() < 4) {
+			throw new CustomerException(CustomerExceptionMessage.LNERROR);
+		} else if (!(String.valueOf(accountBean.getCustomerBean().getPhoneNo())
+				.matches("(0)?[6-9][0-9]{9}"))) {
+			throw new CustomerException(CustomerExceptionMessage.PNOERROR);
+		}  else if (accountBean.getCustomerBean().getAddress().length() == 0) {
+			throw new CustomerException(CustomerExceptionMessage.ADRERROR);
+		} else if (!(accountBean.getCustomerBean().getEmailId()
+				.matches("^[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\\\.[A-Z]{2,6}$"))) {
+			throw new CustomerException(CustomerExceptionMessage.EMAILERROR);
+		} else {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	
+	@Override
+	public String  gender(String gender)
+	{    AccountBean accountBean =new AccountBean();
+	
+		if(accountBean.getCustomerBean().getGender().equals("F"))
+		{
+			return "Mrs";
+		}
+		return "Ms" ;
+		
+		
+}
 
+
+
+	
 }

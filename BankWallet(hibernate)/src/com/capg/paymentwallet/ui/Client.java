@@ -88,7 +88,8 @@ public class Client {
 		
 		System.out.print("Enter Customer lastname :\t");
 		String lname=scanner.next();
-		
+		System.out.println("Enter Gender");
+		 String gender=scanner.next();
 		System.out.print("Enter  Customer  email id :\t");
 		String email=scanner.next();
 		
@@ -109,6 +110,7 @@ public class Client {
 		customerBean.setPhoneNo(phone);
 		customerBean.setFirstName(fname);
 		customerBean.setLastName(lname);
+		customerBean.setGender(gender);
 		
 		Random rand = new Random();
 	int	accId = rand.nextInt(90000000) + 1000000000;
@@ -128,7 +130,7 @@ public class Client {
 		accountBean.setAccountId(accId);
 		accountBean.setBalance(balance);
 		accountBean.setInitialDeposit(balance);
-		accountBean.setCustomerBean(customerBean);;
+		accountBean.setCustomerBean(customerBean);
 		accountBean.setDateOfOpening(accDateInput);
 		
 		
@@ -253,9 +255,10 @@ public class Client {
 	{
 		System.out.println("Enter Account ID to Transfer Money From");
 		int srcAccId=scanner.nextInt();
-		
+		IAccountService service1 =new AccountServiceImpl();
 		AccountBean accountBean1=service.findAccount(srcAccId);
-		System.out.println("Name: "+accountBean1.getCustomerBean().getFirstName());
+		String gender=service1.gender(accountBean1.getCustomerBean().getGender());
+				System.out.println( gender+"." +"Name: "+accountBean1.getCustomerBean().getFirstName());
 		System.out.println("Current Balance is: "+accountBean1.getBalance());
 		
 		System.out.println("Enter Account ID to Transfer Money to");
